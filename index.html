@@ -57,6 +57,33 @@ button:disabled{cursor:default}
  .rise .bl{animation:rise .6s cubic-bezier(.2,1.5,.4,1) both;transform-box:fill-box;transform-origin:50% 100%}
  @keyframes rise{from{transform:translateY(40%) scaleY(.4);opacity:0}}}
 
+/* the imposter spies over the crowd */
+.hero .spy{cursor:pointer}
+.hero .shade{opacity:0;pointer-events:none}
+.hero .fang{opacity:0}
+@media(prefers-reduced-motion:no-preference){
+ .hero.live .shade{animation:shade 8s ease-in-out infinite}
+ .hero.live .spy .bod{transform-box:fill-box;transform-origin:50% 100%;animation:stretch 8s cubic-bezier(.5,0,.3,1) infinite}
+ .hero.live .spy .fac{animation:lift 8s cubic-bezier(.5,0,.3,1) infinite}
+ .hero.live .spy .ieyes{animation:scan 8s ease-in-out infinite}
+ .hero.live .spy .ieyes circle{transform-box:fill-box;transform-origin:50% 50%;animation:glare 8s ease-in-out infinite}
+ .hero.live .spy .grin{animation:hide 8s step-end infinite}
+ .hero.live .spy .fang{animation:show 8s step-end infinite}
+ .hero.live .crew .in{transform-box:fill-box;transform-origin:50% 100%;animation:cower 8s ease-in-out infinite}
+ .hero.now :is(.shade,.spy .bod,.spy .fac,.spy .ieyes,.spy .ieyes circle,.spy .grin,.spy .fang,.crew .in){animation-delay:-4s}
+ @keyframes shade{0%,50%,92%,100%{opacity:0}60%,84%{opacity:1}}
+ @keyframes stretch{0%,52%,90%,100%{transform:none}60%,84%{transform:scaleY(1.3)}}
+ @keyframes lift{0%,52%,90%,100%{transform:none}60%,84%{transform:translateY(calc(var(--lift)*-1px))}}
+ @keyframes scan{0%,60%,86%,100%{transform:none}66%{transform:translateX(-6px)}72%{transform:translateX(6px)}78%{transform:translateX(-6px)}82%{transform:translateX(0)}}
+ @keyframes glare{0%,56%,88%,100%{transform:none;fill:#fff}62%,84%{transform:scaleY(.45);fill:#fff35c;filter:drop-shadow(0 0 3px #fff35c)}}
+ @keyframes hide{0%{opacity:1}58%{opacity:0}86%{opacity:1}}
+ @keyframes show{0%{opacity:0}58%{opacity:1}86%{opacity:0}}
+ @keyframes cower{0%,54%,92%,100%{transform:none}
+  60%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92) translateX(-1px)}63%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92) translateX(1px)}
+  66%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92) translateX(-1px)}69%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92) translateX(1px)}
+  72%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92) translateX(-1px)}75%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92) translateX(1px)}
+  78%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92) translateX(-1px)}84%{transform:rotate(calc(var(--dir)*6deg)) scaleY(.92)}}}
+
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:16px}
 .steps button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 6px;border-radius:999px;background:#ffffff1f;color:#fff;font-size:15px}
@@ -247,8 +274,8 @@ const CATS={
 "Fortnite":[["Battle Bus", "start"], ["Glider", "drop"], ["Storm", "purple"], ["Supply llama", "loot"], ["Supply drop", "sky"], ["Chest", "loot"], ["Chug Jug", "drink"], ["Shield potion", "blue"], ["Slurp juice", "drink"], ["Bandage", "healing"], ["Medkit", "healing"], ["Victory Royale", "celebrate"], ["Emote", "celebrate"], ["V-Bucks", "shop"], ["Battle Pass", "season"], ["Back bling", "cosmetic"], ["Default skin", "noob"], ["Bot", "noob"], ["Shotgun", "close range"], ["Pickaxe", "materials"], ["Wall", "building"], ["Ramp", "building"], ["Sniper", "far"], ["Rocket launcher", "explosion"], ["Grenade", "explosion"], ["Launch pad", "mobility"], ["Zipline", "mobility"], ["Bush", "hiding"], ["Reboot van", "teammates"], ["Tilted Towers", "chaos"]],
 "Roblox":[["Robux", "spend"], ["Game pass", "spend"], ["Noob", "default"], ["Bacon hair", "default"], ["Obby", "jumping"], ["Tower of Hell", "rage"], ["Checkpoint", "progress"], ["Tycoon", "money"], ["Simulator", "grinding"], ["Blox Fruits", "grinding"], ["Adopt Me", "pets"], ["Grow a Garden", "farming"], ["Brookhaven", "roleplay"], ["Bloxburg", "houses"], ["Oof", "classic"], ["Natural Disaster Survival", "survive"], ["Doors", "scary"], ["Piggy", "scary"], ["Murder Mystery", "rounds"], ["Dress to Impress", "outfits"], ["Avatar", "customize"], ["Jailbreak", "escape"], ["Studio", "creating"], ["Admin", "power"], ["Ban", "rules"], ["Lag", "annoying"], ["Friend request", "notification"], ["Badge", "collect"], ["Limited item", "expensive"], ["Lava", "touch"]]
 };
-const VERSION='1.1.0';
-const CHANGES=["A brand new look","The crowd on the home screen watches you","Role cards slide open when you hold them","Auto-updates from your home screen","Drag the dots to reorder players","Step-by-step setup: players, words, settings","Block World, Fortnite and Roblox categories","Make your own word packs","Fairer, harder imposter clues","No repeat words until a category runs out","Sounds, ring timer and a quit button"];
+const VERSION='1.2.0';
+const CHANGES=["The imposter spies on the crowd (tap him!)","A brand new look","The crowd on the home screen watches you","Role cards slide open when you hold them","Auto-updates from your home screen","Drag the dots to reorder players","Step-by-step setup: players, words, settings","Block World, Fortnite and Roblox categories","Make your own word packs","Fairer, harder imposter clues","No repeat words until a category runs out","Sounds, ring timer and a quit button"];
 const GAMES=['Block World','Fortnite','Roblox'];
 const TINT={"Food":"#ff7a3d","Animals":"#22b573","Places":"#14a9c4","Jobs":"#7c5cff","Sports & games":"#ff4f97","Around the house":"#e89b00","Tech":"#3a7bff","Block World":"#4c9a3a","Fortnite":"#8b5cf6","Roblox":"#55627f"};
 const HINTS=[["none","No hint","The imposter knows nothing and bluffs from everyone's clues.","Hardest"],["cat","Category","The imposter learns the category, like Animals.",""],["clue","Clue","One vague word that fits a few answers, like “gray” for Elephant.",""],["both","Category + clue","Both of the above.","Easiest"]];
@@ -277,17 +304,24 @@ const SFX={tap:()=>beep([[660,.06,'triangle']]),reveal:()=>{beep([[520,.08],[780
  win:()=>{beep([[523,.12],[659,.12],[784,.12],[1047,.3]]);buzz(80)},lose:()=>{beep([[392,.18,'sawtooth'],[330,.18,'sawtooth'],[262,.35,'sawtooth']]);buzz([60,60,120])}};
 
 /* blob characters: crew blobs have eyes (pupils in .pup so they can look around), the imposter wears a mask */
-const blob=(x,c,s,imp,i,cx=180)=>{const w=54*s,h=80*s,top=112-h,lk=Math.sign(cx-x),k=w*.045,r=w*.2;return `<g class="bl" data-x="${x}" data-k="${k.toFixed(2)}" data-cy="${(top+w*.5).toFixed(1)}" style="animation-delay:${i*.07}s">
-<path d="M${x-w/2} ${112-r}v-${h-w/2-r}a${w/2} ${w/2} 0 0 1 ${w} 0v${h-w/2-r}a${r} ${r} 0 0 1 -${r} ${r}h-${w-2*r}a${r} ${r} 0 0 1 -${r} -${r}z" style="fill:${c}" stroke="#1d0f4a" stroke-width="3" stroke-linejoin="round"/>
-<path d="M${x+w/2-1.5} ${112-h*.55}v${h*.55-r}a${r-1.5} ${r-1.5} 0 0 1 -${w*.14} ${r*.9}v-${h*.5}z" fill="#000" opacity=".12"/>
-<ellipse cx="${x-w*.22}" cy="${top+w*.3}" rx="${w*.09}" ry="${w*.14}" fill="#fff" opacity=".45"/>
-${imp?`<rect x="${x-w*.46}" y="${top+w*.34}" width="${w*.92}" height="${w*.32}" rx="${w*.16}" fill="#ff3d77" stroke="#1d0f4a" stroke-width="2.5"/><circle cx="${x-w*.18}" cy="${top+w*.5}" r="${w*.075}" fill="#fff"/><circle cx="${x+w*.18}" cy="${top+w*.5}" r="${w*.075}" fill="#fff"/><path d="M${x-w*.2} ${top+w*.86}q${w*.22} ${w*.14} ${w*.42} ${-w*.08}" stroke="#1d0f4a" stroke-width="2.8" fill="none" stroke-linecap="round"/>`
+const blob=(x,c,s,imp,i,cx=180)=>{const w=54*s,h=80*s,top=112-h,lk=Math.sign(cx-x),k=w*.045,r=w*.2,spy=imp=='spy';
+const teeth=spy?Array.from({length:6},(_,j)=>{const tx=x-w*.25+j*w*.1;return `M${tx} ${top+w*.78}l${w*.05} ${w*.08}l${w*.05} -${w*.08}z`}).join(''):'';
+return `<g class="bl${spy?' spy':imp?'':' crew'}" data-x="${x}" data-k="${k.toFixed(2)}" data-cy="${(top+w*.5).toFixed(1)}" style="animation-delay:${i*.07}s;--dir:${lk?-lk:0};--lift:${(h*.3).toFixed(1)}"><g class="in">
+<g class="bod"><path d="M${x-w/2} ${112-r}v-${h-w/2-r}a${w/2} ${w/2} 0 0 1 ${w} 0v${h-w/2-r}a${r} ${r} 0 0 1 -${r} ${r}h-${w-2*r}a${r} ${r} 0 0 1 -${r} -${r}z" style="fill:${c}" stroke="#1d0f4a" stroke-width="3" stroke-linejoin="round"/>
+<path d="M${x+w/2-1.5} ${112-h*.55}v${h*.55-r}a${r-1.5} ${r-1.5} 0 0 1 -${w*.14} ${r*.9}v-${h*.5}z" fill="#000" opacity=".12"/></g>
+<g class="fac"><ellipse cx="${x-w*.22}" cy="${top+w*.3}" rx="${w*.09}" ry="${w*.14}" fill="#fff" opacity=".45"/>
+${imp?`<rect x="${x-w*.46}" y="${top+w*.34}" width="${w*.92}" height="${w*.32}" rx="${w*.16}" fill="#ff3d77" stroke="#1d0f4a" stroke-width="2.5"/><g class="ieyes"><circle cx="${x-w*.18}" cy="${top+w*.5}" r="${w*.075}" fill="#fff"/><circle cx="${x+w*.18}" cy="${top+w*.5}" r="${w*.075}" fill="#fff"/></g><path class="grin" d="M${x-w*.2} ${top+w*.86}q${w*.22} ${w*.14} ${w*.42} ${-w*.08}" stroke="#1d0f4a" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+${spy?`<g class="fang"><path d="M${x-w*.3} ${top+w*.78}h${w*.6}q-${w*.06} ${w*.3} -${w*.3} ${w*.3}t-${w*.3} -${w*.3}z" fill="#1d0f4a"/><path d="${teeth}" fill="#fff"/></g>`:''}`
 :`<circle cx="${x-w*.17}" cy="${top+w*.5}" r="${w*.13}" fill="#fff" stroke="#1d0f4a" stroke-width="2"/><circle cx="${x+w*.17}" cy="${top+w*.5}" r="${w*.13}" fill="#fff" stroke="#1d0f4a" stroke-width="2"/>
 <g class="pup" style="transform:translate(${lk*k*1.2}px,${k*.3}px)"><circle cx="${x-w*.17}" cy="${top+w*.5}" r="${w*.055}" fill="#1d0f4a"/><circle cx="${x+w*.17}" cy="${top+w*.5}" r="${w*.055}" fill="#1d0f4a"/></g>
-<path d="M${x-w*.14} ${top+w*.82}h${w*.28}" stroke="#1d0f4a" stroke-width="2.8" stroke-linecap="round"/>`}</g>`};
+<path d="M${x-w*.14} ${top+w*.82}h${w*.28}" stroke="#1d0f4a" stroke-width="2.8" stroke-linecap="round"/>`}</g></g></g>`};
 const one=(c,imp,cls='')=>`<svg class="one ${cls}" viewBox="7 26 66 94" aria-hidden="true"><ellipse class="gnd" cx="40" cy="113.5" rx="27" ry="4.5"/>${blob(40,c,1,imp,0,imp?40:70)}</svg>`;
-const hero=()=>`<svg class="hero" viewBox="0 0 360 122" aria-hidden="true"><ellipse cx="180" cy="113" rx="170" ry="8" fill="#1d0f4a" opacity=".35"/>
-${[[34,'#ffc93d',.84],[100,'#2fe0a0',1],[180,'#7c55ff',1.14],[260,'#ff8a3d',.98],[326,'#3ec5ff',.86]].map(([x,c,s],i)=>blob(x,c,s,i==2,i)).join('')}</svg>`;
+const hero=()=>`<svg class="hero live" viewBox="0 0 360 122" aria-hidden="true"><defs><radialGradient id="shade"><stop offset="0" stop-color="#0b0420" stop-opacity=".75"/><stop offset=".55" stop-color="#0b0420" stop-opacity=".35"/><stop offset="1" stop-color="#0b0420" stop-opacity="0"/></radialGradient></defs>
+<ellipse class="shade" cx="180" cy="60" rx="200" ry="110" fill="url(#shade)"/><ellipse cx="180" cy="113" rx="170" ry="8" fill="#1d0f4a" opacity=".35"/>
+${[[34,'#ffc93d',.84],[100,'#2fe0a0',1],[180,'#7c55ff',1.14],[260,'#ff8a3d',.98],[326,'#3ec5ff',.86]].map(([x,c,s],i)=>blob(x,c,s,i==2?'spy':false,i)).join('')}</svg>`;
+/* tap the imposter to make him creep right now */
+document.addEventListener('pointerdown',e=>{const g=e.target.closest?.('.hero .spy');if(!g)return;const h=g.closest('.hero');
+  h.classList.remove('live','now');void h.getBoundingClientRect();h.classList.add('live','now');beep([[196,.14,'sawtooth'],[147,.3,'sawtooth']])});
 let firstPaint=true;
 
 function render(){
