@@ -13,7 +13,8 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 
 ## Features
 
-- Hold-to-reveal role cards
+- Tabs for Players, Words and Settings with a sticky Play button
+- Hold-to-reveal role cards in each player's colour
 - Imposter hint options: none, category, clue word, or both
 - 1–3 imposters, talk timer, scoreboard
 - Everyday categories plus video game categories (Minecraft, Fortnite, Pokémon, Roblox)
