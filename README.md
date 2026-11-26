@@ -6,7 +6,7 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 
 ## How to play
 
-1. Add everyone's names in seating order. Roles go around in that order.
+1. Add everyone's names in seating order (drag the dots to reorder). Roles go around in that order.
 2. Confirm players, then pick your word categories, then choose settings (imposter hint, number of imposters, talk timer).
 3. Pass the phone. Each player presses and holds their name card to see their role, then lets go to hide it.
 4. Talk, then vote for who you think the imposter is.
