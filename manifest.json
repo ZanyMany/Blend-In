@@ -4,8 +4,8 @@
   "description": "A pass-the-phone imposter word game for parties.",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#4f7dff",
-  "theme_color": "#4f7dff",
+  "background_color": "#5b2fe3",
+  "theme_color": "#5b2fe3",
   "icons": [
     {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
     {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}
