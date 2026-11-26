@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blend In</title>
+<meta name="theme-color" content="#4f7dff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Blend In">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: friendly, bouncy party game for a couch full of friends
+   IDEA: a stack of soft rounded player cards you press like a big button to peek at your secret
+   PICTURE: a row of round blob friends, one sneaky one with a mask; the hold-to-peek card
+   COLOUR and TYPE: sky blue field, white cards, sunny yellow support, coral for the imposter; Fredoka + Nunito
+   LAYOUT: one calm column, chunky thumb buttons, one screen per step */
+:root{color-scheme:light dark;--bg:light-dark(#4f7dff,#141d45);--bg2:light-dark(#3a66e6,#0d1433);--card:light-dark(#fff,#1f2b5e);--ink:light-dark(#1d2342,#eef1ff);--mute:light-dark(#6b7299,#a5aed6);--soft:light-dark(#eef2ff,#2a3770);--sun:#ffd447;--coral:#ff6b5b;--on:#fff}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:radial-gradient(120% 60% at 50% 0,light-dark(#6b93ff,#1d2a63),var(--bg) 70%) fixed,var(--bg);color:var(--on);font:16px/1.5 Nunito,system-ui,sans-serif;overflow-x:clip;min-height:100vh}
+main{max-width:500px;margin:0 auto;padding:18px 16px 48px}
+h1,h2,.big{font-family:Fredoka,system-ui,sans-serif;font-weight:700;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(40px,12vw,52px)}h2{font-size:32px}
+.lead{margin:6px 0 0;font-weight:700;opacity:.92}
+.hero{display:block;width:100%;height:auto;margin:4px 0 0}
+.card{background:var(--card);color:var(--ink);border-radius:28px;padding:20px;margin-top:16px;box-shadow:0 6px 0 var(--bg2),0 14px 30px #0002}
+.card h3{margin:0 0 10px;font:600 19px Fredoka,sans-serif}
+.sub{color:var(--mute);font-size:14px;margin:-4px 0 12px}
+.row{display:flex;gap:8px}
+input[type=text]{flex:1;font:inherit;font-size:16px;font-weight:700;padding:12px 16px;border-radius:18px;border:0;background:var(--soft);color:var(--ink);min-height:52px}
+input::placeholder{color:var(--mute);font-weight:500}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+button{font:inherit;font-weight:800;cursor:pointer;border:0;border-radius:18px;min-height:48px;padding:0 18px;-webkit-tap-highlight-color:transparent;transition:transform .12s}
+button:active{transform:scale(.96)}
+.btn{display:block;width:100%;font:600 20px Fredoka,sans-serif;min-height:60px;margin-top:16px;background:var(--sun);color:#3a2a00;box-shadow:0 5px 0 #d9a91a}
+.btn.white{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--bg2)}
+.btn.ghost{background:#ffffff26;color:var(--on);box-shadow:none;font-size:17px;min-height:52px}
+.btn:disabled{opacity:.5;box-shadow:none;transform:none}
+.add{background:var(--bg);color:#fff;font-size:16px}
+.av{flex:none;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;color:#fff;font:600 15px Fredoka,sans-serif}
+.players{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.players li{display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:999px;padding:4px 2px 4px 4px;font-weight:800}
+.players li button{min-height:34px;width:34px;padding:0;border-radius:50%;background:transparent;color:var(--mute);font-size:20px}
+.plist{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.plist li{display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:18px;padding:6px 6px 6px 10px;font-weight:800}
+.plist .num{width:18px;color:var(--mute);font-size:14px;text-align:center}.plist .pn{flex:1;overflow-wrap:anywhere}
+.plist button{min-height:40px;width:40px;padding:0;border-radius:12px;background:var(--card);color:var(--ink);font-size:18px}
+.plist button:disabled{opacity:.3}
+textarea{font:inherit;font-size:16px;font-weight:600;padding:12px 16px;border-radius:18px;border:0;background:var(--soft);color:var(--ink);resize:vertical;width:100%}
+textarea::placeholder{color:var(--mute);font-weight:500}
+.empty{color:var(--mute);font-size:15px;margin:12px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:transparent;color:var(--mute);min-height:44px;padding:0 14px;font-weight:700;border-radius:999px;border:2px dashed light-dark(#c9d0ee,#4a5794)}
+.chip[data-cat][aria-pressed=false]::before{content:"+ ";font-weight:800}
+.chip[aria-pressed=true]{background:#2ec27e;border:2px solid #2ec27e;color:#fff;box-shadow:0 3px 0 #1f9a61}
+.chip[aria-pressed=true]::before{content:"✓ ";font-weight:800}
+.chip:not([data-cat]){border-style:solid;color:var(--ink);background:var(--soft);border-color:transparent}
+.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:4px;background:var(--soft);padding:5px;border-radius:20px}
+.seg button{background:transparent;color:var(--mute);min-height:44px;padding:0 4px;font-size:15px;border-radius:15px}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 2px 6px #0002}
+.seg button:disabled{opacity:.35}
+.opt+.opt{margin-top:20px}
+.err{color:var(--coral);font-weight:800;font-size:14px;margin:8px 0 0}
+.center{text-align:center}
+.step{font-weight:800;opacity:.85;margin:0 0 6px;font-size:15px}
+.dots{display:flex;justify-content:center;gap:6px;margin:0 0 12px}.dots i{width:9px;height:9px;border-radius:50%;background:#ffffff55}.dots i.on{background:var(--sun);width:22px;border-radius:9px}.dots i.done{background:#fff}
+/* hold card */
+.hold{position:relative;margin-top:14px;min-height:360px;border-radius:32px;background:var(--card);color:var(--ink);box-shadow:0 8px 0 var(--bg2),0 18px 36px #0003;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;cursor:pointer;overflow:hidden;transition:transform .15s}
+.hold.down{transform:scale(.98) translateY(4px);box-shadow:0 4px 0 var(--bg2),0 10px 20px #0003}
+.face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;transition:opacity .15s}
+.secret{opacity:0}.hold.down .secret{opacity:1}.hold.down .front{opacity:0}
+.front .av{width:96px;height:96px;font-size:46px;box-shadow:0 6px 0 #0002}
+.front .nm{font:700 clamp(32px,10vw,44px)/1.05 Fredoka,sans-serif;overflow-wrap:anywhere}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--soft);color:var(--ink);border-radius:999px;padding:8px 16px;font-weight:800;font-size:15px}
+.secret .big{font-size:clamp(34px,11vw,48px);overflow-wrap:anywhere}
+.secret.imp{background:#241640;color:#fff}.secret.imp .big{color:var(--coral)}
+.secret.imp .pill{background:#ffffff1f;color:#fff}
+.small{font-size:14px;color:var(--mute);margin:0}.imp .small{color:#cfc4ee}
+.ring{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:14px;font-weight:800;color:var(--mute)}
+.timer{font:700 clamp(60px,20vw,84px)/1 Fredoka,sans-serif;text-align:center;margin:10px 0;font-variant-numeric:tabular-nums}
+.timer.done{color:var(--coral)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid button{display:flex;align-items:center;gap:10px;background:var(--soft);color:var(--ink);min-height:60px;font-size:16px;overflow-wrap:anywhere;padding:8px 12px;text-align:left}
+.grid.words button{justify-content:center;text-align:center}
+.score{width:100%;border-collapse:collapse}
+.score td{padding:8px 0;border-bottom:2px solid var(--soft);font-weight:700}.score td:last-child{text-align:right;font:600 20px Fredoka,sans-serif;font-variant-numeric:tabular-nums}
+.score tr:last-child td{border:0}
+.who{display:flex;align-items:center;gap:10px}
+.reveal{background:#241640;color:#fff;text-align:center}
+.reveal .big{color:var(--coral);font-size:clamp(30px,10vw,42px);margin:6px 0 10px}
+.reveal .pill{background:#ffffff1f;color:#fff}
+.win{font-size:56px;line-height:1}
+@media(prefers-reduced-motion:no-preference){.pop{animation:pop .4s cubic-bezier(.2,1.5,.4,1)}@keyframes pop{from{transform:translateY(14px) scale(.97);opacity:0}}.bob{animation:bob 2.4s ease-in-out infinite;transform-origin:bottom}@keyframes bob{50%{transform:translateY(-4px)}}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+{
+const CATS={
+"Food":[["Pizza", "delivery"], ["Sushi", "cold"], ["Taco", "spicy"], ["Pancake", "flip"], ["Popcorn", "salty"], ["Burger", "grill"], ["Ice cream", "flavors"], ["Spaghetti", "sauce"], ["Donut", "box"], ["Chocolate", "melts"], ["Cheese", "slices"], ["Banana", "yellow"], ["Watermelon", "summer"], ["Hot dog", "stadium"], ["Cereal", "milk"], ["Honey", "golden"]],
+"Animals":[["Penguin", "swims"], ["Giraffe", "savanna"], ["Kangaroo", "jump"], ["Shark", "teeth"], ["Owl", "night"], ["Elephant", "gray"], ["Octopus", "camouflage"], ["Snake", "venom"], ["Bee", "wings"], ["Camel", "desert"], ["Panda", "sleepy"], ["Dolphin", "smart"], ["Lion", "savanna"], ["Spider", "fangs"], ["Frog", "green"], ["Parrot", "colorful"]],
+"Places":[["Beach", "vacation"], ["Airport", "security"], ["Hospital", "beds"], ["Library", "quiet"], ["Gym", "lockers"], ["Movie theater", "dark"], ["School", "schedule"], ["Zoo", "tickets"], ["Casino", "cameras"], ["Museum", "old"], ["Space station", "oxygen"], ["Haunted house", "tour"], ["Ski resort", "cold"], ["Prison", "uniforms"], ["Bakery", "early"], ["Campsite", "outdoors"]],
+"Jobs":[["Firefighter", "helmet"], ["Doctor", "appointments"], ["Teacher", "summer"], ["Pilot", "uniform"], ["Chef", "hat"], ["Astronaut", "training"], ["Police officer", "night shift"], ["Dentist", "chair"], ["Farmer", "early"], ["Magician", "audience"], ["Plumber", "tools"], ["Lifeguard", "whistle"], ["Barber", "appointments"], ["Mail carrier", "walking"], ["Scientist", "gloves"], ["Referee", "gets yelled at"]],
+"Sports & games":[["Soccer", "penalties"], ["Basketball", "court"], ["Hockey", "goalie"], ["Chess", "board"], ["Bowling", "strike"], ["Golf", "quiet"], ["Tennis", "serve"], ["Swimming", "Olympics"], ["Boxing", "rounds"], ["Skateboarding", "tricks"], ["Baseball", "gloves"], ["Rock climbing", "grip"], ["Surfing", "board"], ["Darts", "bar"], ["Volleyball", "net"], ["Poker", "table"]],
+"Around the house":[["Toothbrush", "morning"], ["Fridge", "humming"], ["Couch", "living room"], ["Mirror", "glass"], ["Toilet", "handle"], ["Lamp", "switch"], ["Pillow", "soft"], ["Microwave", "timer"], ["Shower", "water"], ["TV remote", "buttons"], ["Vacuum", "loud"], ["Candle", "smell"], ["Alarm clock", "annoying"], ["Umbrella", "opens"], ["Backpack", "carry"], ["Scissors", "drawer"]],
+"Tech":[["Phone", "charger"], ["Video game", "controller"], ["Headphones", "wireless"], ["Wi-Fi", "signal"], ["Drone", "remote control"], ["Robot", "beeps"], ["Laptop", "keyboard"], ["Selfie", "filters"], ["Battery", "dies"], ["Email", "spam"], ["Camera", "lens"], ["Smartwatch", "notifications"], ["VR headset", "strap"], ["Emoji", "faces"], ["Password", "typing"], ["Livestream", "chat"]],
+"Minecraft":[["Creeper", "green"], ["Enderman", "teleport"], ["Diamond", "armor"], ["Netherite", "upgrade"], ["Redstone", "ore"], ["TNT", "explode"], ["Elytra", "flying"], ["Crafting table", "planks"], ["Furnace", "coal"], ["Bed", "night"], ["Nether portal", "purple"], ["Totem of Undying", "raid"], ["Ender pearl", "teleport"], ["Villager", "raid"], ["Zombie", "burns"], ["Skeleton", "burns"], ["Slime", "bounce"], ["Pickaxe", "durability"], ["Torch", "light"], ["Obsidian", "tough"], ["Lava", "bucket"], ["Beacon", "endgame"], ["Enchanting table", "XP"], ["Shulker box", "End"], ["Iron golem", "protect"], ["Ender Dragon", "End"], ["Warden", "dark"], ["Axolotl", "bucket"], ["Anvil", "XP"], ["Saddle", "loot"],["Wither", "boss"], ["Phantom", "night"], ["Ghast", "fireballs"], ["Blaze", "fireballs"], ["Piglin", "gold"], ["Witch", "purple"], ["Trident", "throw"], ["Shield", "protect"], ["Bow", "durability"], ["Spawner", "dungeon"], ["Chest", "storage"], ["Ender chest", "storage"], ["Hopper", "contraptions"], ["Piston", "contraptions"], ["Note block", "music"], ["Jukebox", "music"], ["Map", "explore"], ["Compass", "spawn"], ["Clock", "gold"], ["Fishing rod", "water"], ["Golden apple", "healing"], ["Potion", "effects"], ["Firework rocket", "flying"], ["Minecart", "ride"], ["Boat", "ride"], ["Wolf", "tame"], ["Cat", "tame"], ["Sniffer", "ancient"], ["Allay", "music"], ["Strider", "Nether"], ["Respawn anchor", "spawn"]],
+"Fortnite":[["Battle Bus", "start"], ["Glider", "drop"], ["Storm", "purple"], ["Supply llama", "loot"], ["Supply drop", "sky"], ["Chest", "loot"], ["Chug Jug", "drink"], ["Shield potion", "blue"], ["Slurp juice", "drink"], ["Bandage", "healing"], ["Medkit", "healing"], ["Victory Royale", "celebrate"], ["Emote", "celebrate"], ["V-Bucks", "shop"], ["Battle Pass", "season"], ["Back bling", "cosmetic"], ["Default skin", "noob"], ["Bot", "noob"], ["Shotgun", "close range"], ["Pickaxe", "materials"], ["Wall", "building"], ["Ramp", "building"], ["Sniper", "far"], ["Rocket launcher", "explosion"], ["Grenade", "explosion"], ["Launch pad", "mobility"], ["Zipline", "mobility"], ["Bush", "hiding"], ["Reboot van", "teammates"], ["Tilted Towers", "chaos"]],
+"Pokémon":[["Pikachu", "yellow"], ["Psyduck", "water"], ["Charizard", "starter"], ["Bulbasaur", "starter"], ["Squirtle", "starter"], ["Greninja", "water"], ["Magikarp", "evolves"], ["Gyarados", "huge"], ["Onix", "huge"], ["Snorlax", "sleep"], ["Jigglypuff", "sleep"], ["Eevee", "evolves"], ["Mewtwo", "psychic"], ["Gengar", "purple"], ["Ditto", "purple"], ["Lucario", "blue"], ["Meowth", "villain"], ["Poké Ball", "throw"], ["Master Ball", "rare"], ["Potion", "healing"], ["Pokémon Center", "healing"], ["Rare Candy", "level up"], ["Evolution", "level up"], ["Gym badge", "collect"], ["Pokédex", "collect"], ["Professor", "lab"], ["Shiny", "rare"], ["Legendary", "powerful"], ["Rival", "annoying"], ["Egg", "surprise"]],
+"Roblox":[["Robux", "spend"], ["Game pass", "spend"], ["Noob", "default"], ["Bacon hair", "default"], ["Obby", "jumping"], ["Tower of Hell", "rage"], ["Checkpoint", "progress"], ["Tycoon", "money"], ["Simulator", "grinding"], ["Blox Fruits", "grinding"], ["Adopt Me", "pets"], ["Grow a Garden", "farming"], ["Brookhaven", "roleplay"], ["Bloxburg", "houses"], ["Oof", "classic"], ["Natural Disaster Survival", "survive"], ["Doors", "scary"], ["Piggy", "scary"], ["Murder Mystery", "rounds"], ["Dress to Impress", "outfits"], ["Avatar", "customize"], ["Jailbreak", "escape"], ["Studio", "creating"], ["Admin", "power"], ["Ban", "rules"], ["Lag", "annoying"], ["Friend request", "notification"], ["Badge", "collect"], ["Limited item", "expensive"], ["Lava", "touch"]]
+};
+const GAMES=['Minecraft','Fortnite','Pokémon','Roblox'];
+const HINTS={none:"None",cat:"Category",clue:"Clue word",both:"Both"};
+const COLS=['#ff6b5b','#ffb020','#2ec27e','#22b8cf','#7c5cff','#ff5fa2','#3a86ff','#8bc34a','#ff8a3d','#14b8a6'];
+const app=document.getElementById('app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+let S={players:[],cats:Object.keys(CATS),hint:'cat',imps:1,timer:180,scores:{},custom:{},used:[],sound:true};
+try{const s=JSON.parse(localStorage.getItem('imposter-v1'));if(s)S={...S,...s}}catch(e){}
+const save=()=>{try{localStorage.setItem('imposter-v1',JSON.stringify(S))}catch(e){}};
+let G=null,tick=null,err='',edit=null,perr='';
+const ALL=()=>({...CATS,...S.custom});
+if(!S.custom)S.custom={};if(!S.used)S.used=[];S.cats=S.cats.filter(c=>c in ALL());
+const col=p=>COLS[Math.max(0,S.players.indexOf(p))%COLS.length];
+const av=(p,cls='')=>`<span class="av ${cls}" style="background:${col(p)}">${esc([...p][0].toUpperCase())}</span>`;
+
+const hero=`<svg class="hero" viewBox="0 0 360 120" aria-hidden="true">
+<ellipse cx="180" cy="113" rx="160" ry="6" fill="#0002"/>
+${[[42,'#ffd447',.9],[108,'#2ec27e',1],[180,'#241640',1.1],[252,'#ff5fa2',.95],[318,'#22b8cf',.88]].map(([x,c,s],i)=>{const w=54*s,h=80*s,top=112-h,imp=i==2;return `<g class="bob" style="animation-delay:${i*.3}s">
+<path d="M${x-w/2} 112v-${h-w/2}a${w/2} ${w/2} 0 0 1 ${w} 0v${h-w/2}z" fill="${c}"/>
+<ellipse cx="${x-w*.18}" cy="${top+w*.32}" rx="${w*.12}" ry="${w*.18}" fill="#fff" opacity=".35"/>
+${imp?`<rect x="${x-w*.42}" y="${top+w*.36}" width="${w*.84}" height="${w*.3}" rx="${w*.15}" fill="#ff6b5b"/><circle cx="${x-w*.17}" cy="${top+w*.51}" r="${w*.07}" fill="#fff"/><circle cx="${x+w*.17}" cy="${top+w*.51}" r="${w*.07}" fill="#fff"/><path d="M${x-w*.16} ${top+w*.92}q${w*.16} ${w*.12} ${w*.32} 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>`
+:`<circle cx="${x-w*.16}" cy="${top+w*.5}" r="${w*.07}" fill="#1d2342"/><circle cx="${x+w*.16}" cy="${top+w*.5}" r="${w*.07}" fill="#1d2342"/><path d="M${x-w*.14} ${top+w*.74}q${w*.14} ${w*.13} ${w*.28} 0" stroke="#1d2342" stroke-width="3.5" fill="none" stroke-linecap="round"/>`}
+</g>`}).join('')}</svg>`;
+
+let ac=null;
+function beep(notes){if(!S.sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state=='suspended')ac.resume();let t=ac.currentTime;
+  for(const [f,d,type] of notes){const o=ac.createOscillator(),g=ac.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.25,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.02);t+=d*.9}}catch(e){}}
+const buzz=ms=>{if(S.sound)try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
+const SFX={tap:()=>beep([[660,.06,'triangle']]),reveal:()=>{beep([[520,.08],[780,.12]]);buzz(30)},imp:()=>{beep([[330,.12,'square'],[220,.2,'square']]);buzz([40,40,40])},
+ alarm:()=>{beep([[880,.15,'square'],[0.01,.08],[880,.15,'square'],[0.01,.08],[880,.3,'square']]);buzz([200,100,200,100,300])},
+ win:()=>{beep([[523,.12],[659,.12],[784,.12],[1047,.3]]);buzz(80)},lose:()=>{beep([[392,.18,'sawtooth'],[330,.18,'sawtooth'],[262,.35,'sawtooth']]);buzz([60,60,120])}};
+function render(){
+  clearInterval(tick);
+  const v=G?G.view:'setup';
+  app.innerHTML=({setup,pass,discuss,vote,guess,result})[v]();
+  app.firstElementChild?.classList.add('pop');
+  if(v=='pass')bindHold();
+}
+function setup(){
+  const n=S.players.length,maxI=Math.max(1,Math.min(3,Math.floor((n-1)/2)));
+  if(S.imps>maxI)S.imps=maxI;
+  const scored=S.players.some(p=>S.scores[p]);
+  return `<div class="center"><h1>Blend In</h1>${hero}
+  <p class="lead">Everyone gets the secret word… except one sneaky imposter.</p></div>
+  <div class="card"><h3>Who's playing?</h3>
+   <form class="row" id="addf"><input type="text" id="name" placeholder="Add a name" maxlength="18" autocomplete="off" enterkeyhint="done"><button class="add" type="submit">Add</button></form>
+   ${err?`<p class="err">${esc(err)}</p>`:''}
+   ${n?`<p class="sub" style="margin:12px 0 0">Roles go around in this order. Use the arrows to match your seats.</p><ol class="plist">${S.players.map((p,i)=>`<li><span class="num">${i+1}</span>${av(p)}<span class="pn">${esc(p)}</span><button data-up="${i}" aria-label="Move ${esc(p)} up" ${i?'':'disabled'}>↑</button><button data-down="${i}" aria-label="Move ${esc(p)} down" ${i<n-1?'':'disabled'}>↓</button><button data-rm="${i}" aria-label="Remove ${esc(p)}">×</button></li>`).join('')}</ol>`:'<p class="empty">Add at least 3 friends to play.</p>'}
+  </div>
+  <div class="card">
+   <div class="opt"><h3>Imposter's hint</h3><p class="sub">What the imposter gets instead of the word</p>
+    <div class="seg">${Object.entries(HINTS).map(([k,l])=>`<button data-hint="${k}" aria-pressed="${S.hint==k}">${l}</button>`).join('')}</div>
+    <p class="sub" style="margin:10px 0 0">${{none:'Hard mode: the imposter knows nothing and has to bluff from everyone else’s clues.',cat:'The imposter learns the category, like “Animals”, but not the word.',clue:'The imposter gets one vague word that fits several possible answers, like “gray” for Elephant, but not the category.',both:'Easiest for the imposter: they get the category and the vague clue word.'}[S.hint]}</p></div>
+   <div class="opt"><h3>Number of imposters</h3>
+    <div class="seg">${[1,2,3].map(k=>`<button data-imps="${k}" aria-pressed="${S.imps==k}" ${k>maxI?'disabled':''}>${k}</button>`).join('')}</div></div>
+   <div class="opt"><h3>Talk timer</h3>
+    <div class="seg">${[[0,'Off'],[120,'2 min'],[180,'3 min'],[300,'5 min']].map(([k,l])=>`<button data-timer="${k}" aria-pressed="${S.timer==k}">${l}</button>`).join('')}</div></div>
+   <div class="opt"><h3>Word categories</h3>
+    <div class="chips">${chipList(Object.keys(CATS).filter(c=>!GAMES.includes(c)))}</div></div>
+   <div class="opt"><h3>Video games</h3><p class="sub">Explain the item, mob or thing without naming it</p>
+    <div class="chips">${chipList(GAMES)}</div></div>
+   <div class="opt"><h3>Your packs</h3><p class="sub">Make your own category with inside jokes, friends, anything</p>
+    ${Object.keys(S.custom).length?`<div class="chips">${chipList(Object.keys(S.custom))}</div><div class="chips" style="margin-top:8px">${Object.keys(S.custom).map(c=>`<button class="chip" data-editpack="${esc(c)}">Edit ${esc(c)}</button>`).join('')}</div>`:''}
+    ${edit==null?`<button class="btn white" style="min-height:48px;font-size:16px;background:var(--soft);box-shadow:none;margin-top:10px" data-act="newPack">+ New pack</button>`:packForm()}
+   </div>
+   <div class="opt"><h3>Sounds & vibration</h3>
+    <div class="seg"><button data-sound="1" aria-pressed="${S.sound}">On</button><button data-sound="0" aria-pressed="${!S.sound}">Off</button></div></div>
+  </div>
+  ${scored?`<div class="card"><h3>Scoreboard</h3>${scoreTable()}<button class="btn white" style="min-height:48px;font-size:16px;background:var(--soft);box-shadow:none" data-act="resetScores">Reset scores</button></div>`:''}
+  <button class="btn" data-act="start" ${n<3||!S.cats.length?'disabled':''}>${n<3?`Add ${3-n} more player${3-n>1?'s':''}`:!S.cats.length?'Pick a category':"Let's play!"}</button>`;
+}
+function packForm(){
+  const old=edit&&S.custom[edit]?S.custom[edit]:[];
+  return `<form id="packf" style="margin-top:12px;display:grid;gap:10px">
+   <input type="text" id="pname" placeholder="Pack name, like Our school" maxlength="24" value="${esc(edit||'')}">
+   <textarea id="pwords" rows="7" placeholder="One word per line. Add a clue after a comma:
+Pizza Friday, lunch
+Mr. Lee, glasses
+The big tree, outside">${esc(old.map(([w,c])=>c?w+', '+c:w).join('\n'))}</textarea>
+   <p class="sub" style="margin:0">Need at least 4 words. Words without a clue just won't give the imposter a clue word.</p>
+   ${perr?`<p class="err" style="margin:0">${esc(perr)}</p>`:''}
+   <div class="row"><button class="add" type="submit" style="flex:1">Save pack</button><button type="button" class="chip" data-act="cancelPack">Cancel</button>${edit?`<button type="button" class="chip" style="color:var(--coral)" data-act="delPack">Delete</button>`:''}</div>
+  </form>`;
+}
+function chipList(cs){
+  return cs.map(c=>`<button class="chip ${GAMES.includes(c)?'game':''}" data-cat="${esc(c)}" aria-pressed="${S.cats.includes(c)}">${esc(c)} <span style="opacity:.7;font-weight:600">${ALL()[c].length}</span></button>`).join('');
+}
+function scoreTable(){
+  return `<table class="score">${[...S.players].sort((a,b)=>(S.scores[b]||0)-(S.scores[a]||0)).map(p=>`<tr><td><span class="who">${av(p)}${esc(p)}</span></td><td>${S.scores[p]||0}</td></tr>`).join('')}</table>`;
+}
+function secret(p){
+  if(G.imps.includes(p)){
+    const h=[];
+    if(S.hint=='cat'||S.hint=='both')h.push(`<span class="pill">Category: ${esc(G.cat)}</span>`);
+    if((S.hint=='clue'||S.hint=='both')&&G.clue)h.push(`<span class="pill">Clue: ${esc(G.clue)}</span>`);
+    const mates=G.imps.filter(x=>x!==p);
+    return `<div class="face secret imp"><p class="small" style="font-weight:800">Shh… you're the</p><div class="big">Imposter</div>
+    ${h.join('')||'<span class="pill">No hint this time</span>'}
+    <p class="small">Blend in and figure out the word.</p>
+    ${mates.length?`<p class="small">Partner${mates.length>1?'s':''} in crime: ${mates.map(esc).join(', ')}</p>`:''}</div>`;
+  }
+  return `<div class="face secret"><p class="small" style="font-weight:800">The secret word is</p><div class="big">${esc(G.word)}</div><span class="pill">${esc(G.cat)}</span>
+  <p class="small">${GAMES.includes(G.cat)?`Explain what it is or does in ${esc(G.cat)}, but don't say its name!`:"Give clues, but don't say it!"}</p></div>`;
+}
+function pass(){
+  const p=G.order[G.i],last=G.i==G.order.length-1;
+  return `<div class="center"><div class="dots">${G.order.map((_,i)=>`<i class="${i<G.i?'done':i==G.i?'on':''}"></i>`).join('')}</div>
+  <h2>Pass to ${esc(p)}</h2><p class="lead">Only ${esc(p)} should peek!</p></div>
+  <div class="hold" id="hold" role="button" tabindex="0" aria-label="Press and hold to reveal ${esc(p)}'s role">
+   <div class="face front">${av(p)}<div class="nm">${esc(p)}</div><span class="pill">
+   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 11V6a2 2 0 0 1 4 0v5m0-1a2 2 0 0 1 4 0v4a6 6 0 0 1-6 6h-.5a5 5 0 0 1-4.2-2.3L4 15a1.6 1.6 0 0 1 2.6-1.9L9 15"/></svg>
+   Hold to reveal</span></div>
+   ${secret(p)}
+   <div class="ring" id="ring">Let go to hide</div>
+  </div>
+  <button class="btn" id="nextb" data-act="next" ${G.seen?'':'disabled'}>${G.seen?(last?'Everyone\'s ready, start!':'Got it, pass it on'):'Hold the card to see your role'}</button>`;
+}
+function bindHold(){
+  const h=document.getElementById('hold'),ring=document.getElementById('ring');ring.style.display='none';
+  let t=null;
+  const down=e=>{if(e.type=='pointerdown'){e.preventDefault();try{h.setPointerCapture(e.pointerId)}catch(_){}}
+    clearTimeout(t);t=setTimeout(()=>{h.classList.add('down');ring.style.display='';SFX.reveal();if(!G.seen){G.seen=true;const b=document.getElementById('nextb');b.disabled=false;b.textContent=G.i==G.order.length-1?"Everyone's ready, start!":'Got it, pass it on'}},120)};
+  const up=()=>{clearTimeout(t);h.classList.remove('down');ring.style.display='none'};
+  h.addEventListener('pointerdown',down);
+  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>h.addEventListener(ev,up));
+  h.addEventListener('contextmenu',e=>e.preventDefault());
+  h.addEventListener('keydown',e=>{if((e.key==' '||e.key=='Enter')&&!e.repeat){e.preventDefault();down(e)}});
+  h.addEventListener('keyup',e=>{if(e.key==' '||e.key=='Enter')up()});
+  h.addEventListener('blur',up);
+}
+function discuss(){
+  if(S.timer&&G.left>0){tick=setInterval(()=>{G.left=Math.max(0,G.left-1);const t=document.getElementById('t');if(t){t.textContent=fmt(G.left);t.classList.toggle('done',!G.left)}if(!G.left){clearInterval(tick);SFX.alarm()}},1000)}
+  return `<div class="center"><p class="step">Round ${G.round}</p><h2>Time to talk!</h2>
+  <p class="lead">${GAMES.includes(G.cat)?`Video game round! Take turns explaining the ${esc(G.cat)} thing in one sentence, without naming it. Then vote.`:'Take turns saying one word or clue about the secret word. Then vote.'}</p></div>
+  <div class="card center"><p class="small" style="font-weight:800">Goes first</p>
+  <div class="who" style="justify-content:center;margin-top:8px">${av(G.first)}<span class="big" style="font-size:32px;overflow-wrap:anywhere">${esc(G.first)}</span></div>
+  ${S.timer?`<div class="timer ${G.left?'':'done'}" id="t">${fmt(G.left)}</div><div class="row"><button class="chip" style="flex:1" data-act="addTime">+30 sec</button><button class="chip" style="flex:1" data-act="resetTime">Restart</button></div>`:''}
+  </div>
+  <button class="btn" data-act="toVote">Ready to vote</button>
+  <button class="btn ghost" data-act="toEnd">Skip vote, just reveal</button>`;
+}
+const fmt=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+function vote(){
+  return `<div class="center"><h2>Who's the imposter?</h2><p class="lead">Everyone point on 3… 2… 1! Tap who got the most votes.</p></div>
+  <div class="card"><div class="grid">${G.order.map((p,i)=>`<button data-vote="${i}">${av(p)}${esc(p)}</button>`).join('')}</div></div>
+  <button class="btn ghost" data-act="back">Back to talking</button>`;
+}
+function guess(){
+  const p=G.voted;
+  return `<div class="center"><h2>Gotcha, ${esc(p)}!</h2><p class="lead">Hand the phone to ${esc(p)}. One guess: get the word right to steal the win.</p></div>
+  <div class="card"><h3>What was the word?</h3><div class="grid words">${G.choices.map((w,i)=>`<button data-guess="${i}">${esc(w)}</button>`).join('')}</div></div>`;
+}
+function result(){
+  const r=G.res,many=G.imps.length>1;
+  const msg={wrong:`${esc(G.voted)} was innocent! The imposter${many?'s':''} slipped away.`,caughtRight:`${esc(G.voted)} got caught… but guessed the word!`,caughtWrong:`${esc(G.voted)} got caught and guessed “${esc(G.guessed)}”. Nope!`,skip:'No vote this round. Here\'s the truth:'}[r];
+  const impWin=r=='wrong'||r=='caughtRight';
+  return `<div class="center"><p class="step">Round ${G.round}</p><h2>${r=='skip'?'The big reveal':impWin?'Imposter wins!':'Crew wins!'}</h2><p class="lead">${msg}</p></div>
+  <div class="card reveal"><p class="small" style="font-weight:800;color:#cfc4ee">The imposter${many?'s were':' was'}</p>
+  <div class="who" style="justify-content:center;flex-wrap:wrap;margin-top:8px">${G.imps.map(p=>av(p)).join('')}</div>
+  <div class="big">${G.imps.map(esc).join(' & ')}</div>
+  <span class="pill">The word was ${esc(G.word)}</span>
+  <div style="margin-top:14px;padding-top:14px;border-top:2px solid #ffffff1f">
+   <p class="small" style="font-weight:800;color:#cfc4ee">What the imposter saw</p>
+   <div class="chips" style="justify-content:center;margin-top:8px">
+    ${S.hint=='none'?'<span class="pill">No hint</span>':''}
+    ${S.hint=='cat'||S.hint=='both'?`<span class="pill">Category: ${esc(G.cat)}</span>`:''}
+    ${(S.hint=='clue'||S.hint=='both')&&G.clue?`<span class="pill">Clue: ${esc(G.clue)}</span>`:''}
+    ${(S.hint=='clue')&&!G.clue?'<span class="pill">No clue for this word</span>':''}
+   </div>
+   ${(S.hint=='none'||S.hint=='cat')&&G.clue?`<p class="small" style="color:#cfc4ee;margin-top:8px">The clue word would have been “${esc(G.clue)}”</p>`:''}
+  </div></div>
+  ${r!='skip'?`<div class="card"><h3>Scoreboard</h3><p class="sub">${impWin?'+2 for each imposter':'+1 for everyone in the crew'}</p>${scoreTable()}</div>`:''}
+  <button class="btn" data-act="start">Play again</button>
+  <button class="btn ghost" data-act="home">Change players or settings</button>`;
+}
+function start(){
+  const A=ALL(),cats=S.cats.filter(c=>c in A),key=(c,w)=>c+'|'+w;
+  let pool=cats.flatMap(c=>A[c].map(([w,cl])=>[c,w,cl||''])).filter(([c,w])=>!S.used.includes(key(c,w)));
+  if(!pool.length){const ks=new Set(cats.flatMap(c=>A[c].map(([w])=>key(c,w))));S.used=S.used.filter(k=>!ks.has(k));pool=cats.flatMap(c=>A[c].map(([w,cl])=>[c,w,cl||'']))}
+  const [cat,word,clue]=pool[rnd(pool.length)],list=A[cat];
+  S.used.push(key(cat,word));if(S.used.length>600)S.used=S.used.slice(-600);save();
+  const order=[...S.players],imps=shuffle(S.players).slice(0,S.imps);
+  let others=shuffle(list.map(x=>x[0]).filter(w=>w!==word)).slice(0,7);
+  if(others.length<5)others=[...others,...shuffle(cats.filter(c=>c!==cat).flatMap(c=>A[c].map(x=>x[0])).filter(w=>w!==word&&!others.includes(w))).slice(0,7-others.length)];
+  SFX.tap();G={view:'pass',i:0,seen:false,order,imps,cat,word,clue,first:order[rnd(order.length)],left:S.timer,round:(G?.round||0)+1,choices:shuffle([word,...others])};
+  render();scrollTo(0,0);
+}
+function award(impWin){
+  for(const p of S.players){if(impWin&&G.imps.includes(p))S.scores[p]=(S.scores[p]||0)+2;if(!impWin&&!G.imps.includes(p))S.scores[p]=(S.scores[p]||0)+1}
+  save();
+}
+app.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(e.target.id=='packf'){
+    const nm=document.getElementById('pname').value.trim(),raw=document.getElementById('pwords').value;
+    const words=[];for(const line of raw.split('\n')){const i=line.indexOf(',');const w=(i<0?line:line.slice(0,i)).trim(),c=(i<0?'':line.slice(i+1)).trim();if(w&&!words.some(x=>x[0].toLowerCase()==w.toLowerCase()))words.push([w.slice(0,40),c.slice(0,30)])}
+    if(!nm)perr='Give your pack a name.';else if(nm in CATS)perr='That name is already a built-in category.';else if(nm!==edit&&nm in S.custom)perr='You already have a pack with that name.';else if(words.length<4)perr='Add at least 4 words.';
+    else{perr='';if(edit&&edit!==nm){delete S.custom[edit];S.cats=S.cats.filter(c=>c!==edit)}S.custom[nm]=words;if(!S.cats.includes(nm))S.cats.push(nm);edit=null;save()}
+    render();return}
+  const v=document.getElementById('name').value.trim();
+  if(!v)return;
+  if(S.players.some(p=>p.toLowerCase()==v.toLowerCase())){err='That name is already in.';render();return}
+  if(S.players.length>=20){err='20 players max.';render();return}
+  err='';S.players.push(v);save();render();document.getElementById('name').focus();
+});
+app.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
+  if(d.up!=null||d.down!=null){const i=+(d.up??d.down),j=d.up!=null?i-1:i+1;[S.players[i],S.players[j]]=[S.players[j],S.players[i]];save();render();return}
+  if(d.sound!=null){S.sound=d.sound=='1';save();render();SFX.tap();return}
+  if(d.editpack!=null){edit=d.editpack;perr='';render();document.getElementById('pname')?.focus();return}
+  if(d.rm!=null){S.players.splice(+d.rm,1);err='';save();render();return}
+  if(d.hint){S.hint=d.hint;save();render();return}
+  if(d.imps){S.imps=+d.imps;save();render();return}
+  if(d.timer!=null){S.timer=+d.timer;save();render();return}
+  if(d.cat){const c=d.cat;S.cats=S.cats.includes(c)?S.cats.filter(x=>x!==c):[...S.cats,c];save();render();return}
+  if(d.vote!=null){const p=G.order[+d.vote];G.voted=p;if(G.imps.includes(p))G.view='guess';else{G.res='wrong';award(true);G.view='result';SFX.lose()}render();scrollTo(0,0);return}
+  if(d.guess!=null){const w=G.choices[+d.guess];G.guessed=w;G.res=w==G.word?'caughtRight':'caughtWrong';award(G.res=='caughtRight');SFX[G.res=='caughtRight'?'lose':'win']();G.view='result';render();scrollTo(0,0);return}
+  const a=d.act;
+  if(a=='start')start();
+  else if(a=='next'){if(G.i<G.order.length-1){G.i++;G.seen=false;G.view='pass'}else G.view='discuss';render();scrollTo(0,0)}
+  else if(a=='toVote'){G.view='vote';render()}
+  else if(a=='back'){G.view='discuss';render()}
+  else if(a=='toEnd'){SFX.win();G.res='skip';G.view='result';render()}
+  else if(a=='addTime'){G.left+=30;render()}
+  else if(a=='resetTime'){G.left=S.timer;render()}
+  else if(a=='home'){G.view='setup';render()}
+  else if(a=='newPack'){edit='';perr='';render();document.getElementById('pname')?.focus()}
+  else if(a=='cancelPack'){edit=null;perr='';render()}
+  else if(a=='delPack'){delete S.custom[edit];S.cats=S.cats.filter(c=>c!==edit);edit=null;save();render()}
+  else if(a=='resetScores'){S.scores={};save();render()}
+});
+render();
+}
+</script>
+</body>
+</html>
