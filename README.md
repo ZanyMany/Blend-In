@@ -28,3 +28,11 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 It's a single `index.html` file. Open it in a browser, or turn on GitHub Pages for this repo (Settings → Pages → Deploy from branch → `main`).
 
 Not affiliated with Mojang, Microsoft, Epic Games or Roblox. Game names are used only to describe word categories.
+
+## Versions and updates
+
+The current version is shown at the bottom of the Players tab (tap it to see what's new).
+
+The app checks `version.json` when it opens, when you come back to it, and every 5 minutes. If the number there is newer than the one built into `index.html`, it updates itself on the setup screens, or shows an **Update** button if you're mid-game.
+
+To release an update, bump `VERSION` (and `CHANGES`) in `index.html` and the number in `version.json` to the same value, then push.

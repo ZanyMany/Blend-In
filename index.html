@@ -147,6 +147,10 @@ textarea{resize:vertical;line-height:1.45}
 .score td{padding:9px 0;border-bottom:2px solid var(--soft);font-weight:800}.score td:last-child{text-align:right;font:600 20px Fredoka,sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
 .score tr:last-child td{border:0}
 .score .plus{color:var(--good);font-size:14px;margin-right:6px}
+.ver{text-align:center;margin-top:10px}.ver .link{color:#ffffffc0}
+.ver ul{list-style:none;margin:4px auto 0;padding:14px 18px;max-width:360px;text-align:left;background:#ffffff1f;border-radius:20px;font-size:14px;font-weight:700;display:grid;gap:6px}
+.ver li::before{content:"• ";color:var(--sun)}
+.upd{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translateX(-50%);z-index:20;background:var(--sun);color:#3a2a00;box-shadow:0 4px 0 var(--sun2),0 10px 24px #0003;border-radius:999px;min-height:44px;padding:0 18px;font-size:14px;white-space:nowrap}
 .who{display:flex;align-items:center;gap:10px}
 @media(prefers-reduced-motion:no-preference){.pop{animation:pop .4s cubic-bezier(.2,1.4,.4,1)}@keyframes pop{from{transform:translateY(12px);opacity:0}}.bob{animation:bob 2.4s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-5px)}}}
 </style>
@@ -167,6 +171,8 @@ const CATS={
 "Fortnite":[["Battle Bus", "start"], ["Glider", "drop"], ["Storm", "purple"], ["Supply llama", "loot"], ["Supply drop", "sky"], ["Chest", "loot"], ["Chug Jug", "drink"], ["Shield potion", "blue"], ["Slurp juice", "drink"], ["Bandage", "healing"], ["Medkit", "healing"], ["Victory Royale", "celebrate"], ["Emote", "celebrate"], ["V-Bucks", "shop"], ["Battle Pass", "season"], ["Back bling", "cosmetic"], ["Default skin", "noob"], ["Bot", "noob"], ["Shotgun", "close range"], ["Pickaxe", "materials"], ["Wall", "building"], ["Ramp", "building"], ["Sniper", "far"], ["Rocket launcher", "explosion"], ["Grenade", "explosion"], ["Launch pad", "mobility"], ["Zipline", "mobility"], ["Bush", "hiding"], ["Reboot van", "teammates"], ["Tilted Towers", "chaos"]],
 "Roblox":[["Robux", "spend"], ["Game pass", "spend"], ["Noob", "default"], ["Bacon hair", "default"], ["Obby", "jumping"], ["Tower of Hell", "rage"], ["Checkpoint", "progress"], ["Tycoon", "money"], ["Simulator", "grinding"], ["Blox Fruits", "grinding"], ["Adopt Me", "pets"], ["Grow a Garden", "farming"], ["Brookhaven", "roleplay"], ["Bloxburg", "houses"], ["Oof", "classic"], ["Natural Disaster Survival", "survive"], ["Doors", "scary"], ["Piggy", "scary"], ["Murder Mystery", "rounds"], ["Dress to Impress", "outfits"], ["Avatar", "customize"], ["Jailbreak", "escape"], ["Studio", "creating"], ["Admin", "power"], ["Ban", "rules"], ["Lag", "annoying"], ["Friend request", "notification"], ["Badge", "collect"], ["Limited item", "expensive"], ["Lava", "touch"]]
 };
+const VERSION='1.0.0';
+const CHANGES=["Drag the dots to reorder players","Step-by-step setup: players, words, settings","Block World, Fortnite and Roblox categories","Make your own word packs","Fairer, harder imposter clues","No repeat words until a category runs out","Sounds, ring timer and a quit button"];
 const GAMES=['Block World','Fortnite','Roblox'];
 const TINT={"Food":"#ff7a3d","Animals":"#22b573","Places":"#14a9c4","Jobs":"#7c5cff","Sports & games":"#ff4f97","Around the house":"#e89b00","Tech":"#3a7bff","Block World":"#4c9a3a","Fortnite":"#8b5cf6","Roblox":"#55627f"};
 const HINTS=[["none","No hint","The imposter knows nothing and bluffs from everyone's clues.","Hardest"],["cat","Category","The imposter learns the category, like Animals.",""],["clue","Clue","One vague word that fits a few answers, like “gray” for Elephant.",""],["both","Category + clue","Both of the above.","Easiest"]];
@@ -180,7 +186,7 @@ try{const s=JSON.parse(localStorage.getItem('imposter-v1'));if(s)S={...S,...s}}c
 const save=()=>{try{localStorage.setItem('imposter-v1',JSON.stringify(S))}catch(e){}};
 const ALL=()=>({...CATS,...S.custom});
 if(!S.custom)S.custom={};if(S.cats.includes('Minecraft'))S.cats.push('Block World');S.used=(S.used||[]).map(k=>k.replace(/^Minecraft\|/,'Block World|'));if(!S.used)S.used=[];S.cats=S.cats.filter(c=>c in ALL());
-let G=null,tick=null,err='',edit=null,perr='',quitArm=false,lastPts={};
+let G=null,tick=null,err='',edit=null,perr='',quitArm=false,lastPts={},newVer=null,showNew=false;
 const col=p=>COLS[Math.max(0,S.players.indexOf(p))%COLS.length];
 const ini=p=>esc([...p][0].toUpperCase());
 const av=p=>`<span class="av" style="background:${col(p)}">${ini(p)}</span>`;
@@ -230,6 +236,21 @@ function setup(){
    :S.tab=='words'?`<button class="btn" data-tab="settings" data-flow="1" ${!nc?'disabled':''}>${!nc?'Pick at least one category':'Confirm words →'}</button>`
    :`<button class="btn" data-act="start" ${n<3||!nc?'disabled':''}>${n<3?'Add players first':!nc?'Pick a category first':"Let's play!"}</button>`}</div>`;
 }
+async function checkUpdate(){
+  try{const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
+    if(!j.version||j.version===VERSION)return;newVer=j.version;
+    let tried=null;try{tried=sessionStorage.getItem('blend-upd')}catch(e){}
+    if((!G||G.view=='setup')&&tried!==j.version)applyUpdate();else showBanner()}catch(e){}
+}
+async function applyUpdate(){
+  try{sessionStorage.setItem('blend-upd',newVer)}catch(e){}
+  try{await fetch(location.pathname,{cache:'reload'})}catch(e){}
+  location.reload();
+}
+function showBanner(){
+  if(document.getElementById('upd'))return;
+  const d=document.createElement('button');d.id='upd';d.className='upd';d.innerHTML=`New version ${esc(newVer)} ready · <u>Update</u>`;d.onclick=applyUpdate;document.body.appendChild(d);
+}
 function tabPlayers(){
   const n=S.players.length,scored=S.players.some(p=>S.scores[p]);
   return `<div class="card"><h3>Who's playing?</h3><p class="sub">Add names in seating order. Drag ⋮⋮ to reorder.</p>
@@ -239,7 +260,9 @@ function tabPlayers(){
    <button class="ib x" data-rm="${i}" aria-label="Remove ${esc(p)}">✕</button></li>`).join('')}</ol>
    ${scored?`<div class="center" style="margin-top:8px"><button class="link" data-act="resetScores">Reset scores</button></div>`:''}`
    :`<div class="empty"><svg width="120" height="60" viewBox="40 52 200 62" aria-hidden="true">${[[90,'#c9d0ee',.8],[140,'#b3bde6',.95],[190,'#c9d0ee',.8]].map(([x,c,s],i)=>blob(x,c,s,false,i,140)).join('')}</svg>Add at least 3 friends to start</div>`}
-  </div>`;
+  </div>
+  <div class="ver"><button class="link" data-act="whatsNew">Version ${VERSION} · ${showNew?'Hide':"What's new"}</button>
+   ${showNew?`<ul>${CHANGES.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`:''}</div>`;
 }
 function bindDrag(){
   const list=document.querySelector('.plist');if(!list)return;
@@ -456,9 +479,12 @@ app.addEventListener('click',e=>{
   else if(a=='newPack'){edit='';perr='';render();document.getElementById('pname')?.focus()}
   else if(a=='cancelPack'){edit=null;perr='';render()}
   else if(a=='delPack'){delete S.custom[edit];S.cats=S.cats.filter(c=>c!==edit);edit=null;save();render()}
+  else if(a=='whatsNew'){showNew=!showNew;render()}
   else if(a=='resetScores'){S.scores={};save();render()}
 });
 render();
+checkUpdate();setInterval(checkUpdate,5*60*1000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState=='visible')checkUpdate()});
 }
 </script>
 </body>
