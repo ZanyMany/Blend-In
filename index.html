@@ -30,13 +30,14 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 h1,h2,h3,.big,.f{font-family:Fredoka,system-ui,sans-serif;font-weight:700;line-height:1.05;margin:0;text-wrap:balance}
 h1{font-size:clamp(44px,13vw,56px);letter-spacing:-.5px}h2{font-size:clamp(28px,8vw,34px)}h3{font-size:19px;font-weight:600}
 p{margin:0}
+.mini-head{display:flex;align-items:center;justify-content:center;gap:8px;padding:2px 0 0}.mini-head svg{width:34px;height:36px}.mini-head .f{font-size:26px}
 .lead{font-weight:700;opacity:.9;margin-top:6px}
 .center{text-align:center}
 .hero{display:block;width:100%;max-width:400px;height:auto;margin:2px auto 0}
-.card{background:var(--card);color:var(--ink);border-radius:28px;padding:20px;margin-top:14px;box-shadow:0 6px 0 var(--bg2),0 16px 34px #0a145233}
+.card{background:var(--card);color:var(--ink);border-radius:28px;padding:22px 20px;margin-top:18px;box-shadow:0 6px 0 var(--bg2),0 16px 34px #0a145233}
 .card>h3{margin-bottom:4px}
 .sub{color:var(--mute);font-size:14px;font-weight:600;margin:2px 0 12px}
-.sec+.sec{margin-top:22px}
+.sec+.sec{margin-top:30px}
 :focus-visible{outline:3px solid var(--sun);outline-offset:3px}
 button{font:inherit;font-weight:800;cursor:pointer;border:0;border-radius:18px;min-height:46px;padding:0 16px;color:inherit;background:none;-webkit-tap-highlight-color:transparent;transition:transform .12s,background .15s}
 button:active:not(:disabled){transform:scale(.96)}
@@ -54,7 +55,7 @@ textarea{resize:vertical;line-height:1.45}
 .err{color:var(--coral);font-weight:800;font-size:14px;margin-top:8px}
 .av{flex:none;display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;color:#fff;font:600 17px Fredoka,sans-serif}
 /* tabs */
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:#ffffff26;padding:5px;border-radius:22px;margin-top:16px}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:#ffffff26;padding:5px;border-radius:22px;margin-top:14px}
 .tabs button{min-height:46px;border-radius:17px;color:#fff;font-size:16px;padding:0 6px}
 .tabs button[aria-selected=true]{background:light-dark(#fff,var(--blue));color:light-dark(var(--ink),#fff);box-shadow:0 3px 10px #0002}
 .tabs .n{display:inline-block;min-width:22px;padding:0 6px;margin-left:4px;border-radius:999px;background:#ffffff33;font-size:13px;line-height:22px}
@@ -76,10 +77,10 @@ textarea{resize:vertical;line-height:1.45}
 .link{background:none;color:var(--mute);min-height:40px;padding:0 6px;font-size:14px;text-decoration:underline;text-underline-offset:3px}
 /* words */
 .tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:10px;min-height:86px;padding:12px 14px;border-radius:20px;text-align:left;background:var(--soft);color:var(--ink);border:2px solid transparent}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;min-height:68px;padding:10px 14px;border-radius:20px;text-align:left;background:var(--soft);color:var(--ink);border:2px solid transparent}
 .tile .tn{font:600 17px/1.15 Fredoka,sans-serif;overflow-wrap:anywhere;padding-right:26px}
 .tile .tc{font-size:13px;font-weight:800;color:var(--mute)}
-.tile .dot{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;border:2.5px solid light-dark(#c9d0ee,#4a5794);display:grid;place-items:center}
+.tile .dot{position:absolute;top:50%;margin-top:-12px;right:12px;width:24px;height:24px;border-radius:50%;border:2.5px solid light-dark(#c9d0ee,#4a5794);display:grid;place-items:center}
 .tile[aria-pressed=true]{background:var(--c);color:#fff;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 70%,#000)}
 .tile[aria-pressed=true] .tc{color:#ffffffd0}
 .tile[aria-pressed=true] .dot{background:#fff;border-color:#fff}
@@ -92,10 +93,10 @@ textarea{resize:vertical;line-height:1.45}
 .chip{min-height:40px;padding:0 14px;border-radius:999px;background:var(--soft);color:var(--ink);font-size:14px}
 /* settings */
 .opts{display:grid;gap:8px}
-.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:14px;border-radius:20px;background:var(--soft);color:var(--ink);font-weight:600;border:2px solid transparent}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;padding:12px 14px;border-radius:20px;background:var(--soft);color:var(--ink);font-weight:600;border:2px solid transparent}
 .opt b{display:block;font:600 17px Fredoka,sans-serif}
 .opt span{color:var(--mute);font-size:14px;line-height:1.4}
-.opt i{flex:none;width:24px;height:24px;margin-top:2px;border-radius:50%;border:2.5px solid light-dark(#c9d0ee,#4a5794)}
+.opt i{flex:none;width:24px;height:24px;border-radius:50%;border:2.5px solid light-dark(#c9d0ee,#4a5794)}
 .opt[aria-pressed=true]{border-color:var(--blue);background:light-dark(#e6edff,#2a3a85)}
 .opt[aria-pressed=true] i{border:7px solid var(--blue)}
 .tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--card);font:800 11px Nunito,sans-serif;color:var(--mute);vertical-align:3px}
@@ -194,11 +195,13 @@ const SFX={tap:()=>beep([[660,.06,'triangle']]),reveal:()=>{beep([[520,.08],[780
  alarm:()=>{beep([[880,.15,'square'],[1,.08],[880,.15,'square'],[1,.08],[880,.3,'square']]);buzz([200,100,200,100,300])},
  win:()=>{beep([[523,.12],[659,.12],[784,.12],[1047,.3]]);buzz(80)},lose:()=>{beep([[392,.18,'sawtooth'],[330,.18,'sawtooth'],[262,.35,'sawtooth']]);buzz([60,60,120])}};
 
-const blob=(x,c,s,imp,i)=>{const w=54*s,h=80*s,top=112-h;return `<g class="bob" style="animation-delay:${i*.3}s;transform-box:fill-box">
+const blob=(x,c,s,imp,i,cx=180)=>{const w=54*s,h=80*s,top=112-h,lk=Math.sign(cx-x);return `<g class="bob" style="animation-delay:${i*.3}s;transform-box:fill-box">
 <path d="M${x-w/2} 112v-${h-w/2}a${w/2} ${w/2} 0 0 1 ${w} 0v${h-w/2}z" fill="${c}"/>
 <ellipse cx="${x-w*.2}" cy="${top+w*.3}" rx="${w*.11}" ry="${w*.17}" fill="#fff" opacity=".35"/>
-${imp?`<rect x="${x-w*.42}" y="${top+w*.36}" width="${w*.84}" height="${w*.3}" rx="${w*.15}" fill="#ff6b5b"/><circle cx="${x-w*.17}" cy="${top+w*.51}" r="${w*.07}" fill="#fff"/><circle cx="${x+w*.17}" cy="${top+w*.51}" r="${w*.07}" fill="#fff"/><path d="M${x-w*.16} ${top+w*.92}q${w*.16} ${w*.12} ${w*.32} 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>`
-:`<circle cx="${x-w*.16}" cy="${top+w*.5}" r="${w*.07}" fill="#18203f"/><circle cx="${x+w*.16}" cy="${top+w*.5}" r="${w*.07}" fill="#18203f"/><path d="M${x-w*.14} ${top+w*.74}q${w*.14} ${w*.13} ${w*.28} 0" stroke="#18203f" stroke-width="3.5" fill="none" stroke-linecap="round"/>`}</g>`};
+${imp?`<rect x="${x-w*.42}" y="${top+w*.36}" width="${w*.84}" height="${w*.3}" rx="${w*.15}" fill="#ff6b5b"/><circle cx="${x-w*.17}" cy="${top+w*.51}" r="${w*.07}" fill="#fff"/><circle cx="${x+w*.17}" cy="${top+w*.51}" r="${w*.07}" fill="#fff"/><path d="M${x-w*.3} ${top+w*.84}q${w*.32} ${w*.26} ${w*.6} ${-w*.06}" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+:`<circle cx="${x-w*.17}" cy="${top+w*.5}" r="${w*.12}" fill="#fff"/><circle cx="${x+w*.17}" cy="${top+w*.5}" r="${w*.12}" fill="#fff"/>
+<circle cx="${x-w*.17+lk*w*.045}" cy="${top+w*.52}" r="${w*.045}" fill="#18203f"/><circle cx="${x+w*.17+lk*w*.045}" cy="${top+w*.52}" r="${w*.045}" fill="#18203f"/>
+<path d="M${x-w*.27} ${top+w*.75}q${w*.25} ${w*.21} ${w*.54} ${-w*.04}" stroke="#18203f" stroke-width="2.6" fill="none" stroke-linecap="round"/>`}</g>`};
 const hero=`<svg class="hero" viewBox="0 0 360 122" aria-hidden="true"><ellipse cx="180" cy="114" rx="165" ry="7" fill="#0a145233"/>
 ${[[38,'#ffd447',.86],[104,'#22b573',1],[180,'#221438',1.12],[256,'#ff4f97',.96],[322,'#14a9c4',.88]].map(([x,c,s],i)=>blob(x,c,s,i==2,i)).join('')}</svg>`;
 
@@ -219,23 +222,24 @@ function setup(){
   const maxI=Math.max(1,Math.min(3,Math.floor((n-1)/2)));if(S.imps>maxI)S.imps=maxI;
   const words=S.cats.reduce((a,c)=>a+(ALL()[c]?.length||0),0);
   const body={players:tabPlayers,words:tabWords,settings:()=>tabSettings(maxI)}[S.tab]();
-  return `<div class="center"><h1>Blend In</h1>${hero}<p class="lead">Everyone gets the secret word… except the imposter.</p></div>
+  const full=S.tab=='players';
+  return `${full?`<div class="center"><h1>Blend In</h1>${hero}<p class="lead">Everyone gets the secret word… except the imposter.</p></div>`:`<div class="mini-head"><svg viewBox="140 30 80 84" aria-hidden="true">${blob(180,'#221438',1.1,true,0)}</svg><span class="f">Blend In</span></div>`}
   <div class="tabs" role="tablist">${[['players','Players',n],['words','Words',nc],['settings','Settings','']].map(([k,l,c])=>`<button role="tab" data-tab="${k}" aria-selected="${S.tab==k}">${l}${c!==''?`<span class="n">${c}</span>`:''}</button>`).join('')}</div>
   ${body}
-  <div class="bar"><p class="sum">${n} player${n==1?'':'s'} · ${words} words · ${S.imps} imposter${S.imps>1?'s':''} · ${HINTS.find(h=>h[0]==S.hint)[1].toLowerCase()} hint</p>
+  <div class="bar">${S.tab=='settings'?`<p class="sum">${n} player${n==1?'':'s'} · ${words} words · ${S.imps} imposter${S.imps>1?'s':''} · ${HINTS.find(h=>h[0]==S.hint)[1].toLowerCase()} hint</p>`:''}
   ${S.tab=='players'?`<button class="btn" data-tab="words" data-flow="1" ${n<3?'disabled':''}>${n<3?`Add ${3-n} more player${3-n>1?'s':''}`:'Confirm players →'}</button>`
    :S.tab=='words'?`<button class="btn" data-tab="settings" data-flow="1" ${!nc?'disabled':''}>${!nc?'Pick at least one category':'Confirm words →'}</button>`
    :`<button class="btn" data-act="start" ${n<3||!nc?'disabled':''}>${n<3?'Add players first':!nc?'Pick a category first':"Let's play!"}</button>`}</div>`;
 }
 function tabPlayers(){
   const n=S.players.length,scored=S.players.some(p=>S.scores[p]);
-  return `<div class="card"><h3>Who's playing?</h3><p class="sub">Add names in seating order. Drag the dots to reorder, roles get passed around in this order.</p>
+  return `<div class="card"><h3>Who's playing?</h3><p class="sub">Add names in seating order. Drag ⋮⋮ to reorder.</p>
    <form class="row" id="addf"><input type="text" id="name" placeholder="Add a name" maxlength="18" autocomplete="off" enterkeyhint="done" aria-label="Player name"><button class="add" type="submit">Add</button></form>
    ${err?`<p class="err">${esc(err)}</p>`:''}
    ${n?`<ol class="plist">${S.players.map((p,i)=>`<li data-i="${i}"><button class="grip" aria-label="Drag to reorder ${esc(p)}, or use arrow keys"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">${[4,9,14].map(y=>`<circle cx="6" cy="${y}" r="1.7"/><circle cx="12" cy="${y}" r="1.7"/>`).join('')}</svg></button><span class="num">${i+1}</span>${av(p)}<span class="pn">${esc(p)}</span>${scored?`<span class="pts">${S.scores[p]||0} pts</span>`:''}
    <button class="ib x" data-rm="${i}" aria-label="Remove ${esc(p)}">✕</button></li>`).join('')}</ol>
    ${scored?`<div class="center" style="margin-top:8px"><button class="link" data-act="resetScores">Reset scores</button></div>`:''}`
-   :`<div class="empty"><svg width="120" height="60" viewBox="40 52 200 62" aria-hidden="true">${[[90,'#c9d0ee',.8],[140,'#b3bde6',.95],[190,'#c9d0ee',.8]].map(([x,c,s],i)=>blob(x,c,s,false,i)).join('')}</svg>Add at least 3 friends to start</div>`}
+   :`<div class="empty"><svg width="120" height="60" viewBox="40 52 200 62" aria-hidden="true">${[[90,'#c9d0ee',.8],[140,'#b3bde6',.95],[190,'#c9d0ee',.8]].map(([x,c,s],i)=>blob(x,c,s,false,i,140)).join('')}</svg>Add at least 3 friends to start</div>`}
   </div>`;
 }
 function bindDrag(){
@@ -271,8 +275,8 @@ function tabWords(){
   const grp=(t,sub,list,k)=>`<div class="sec"><div class="headrow"><h3>${t}</h3>${list.length?`<span class="mini"><button data-all="${k}">All</button><button data-none="${k}">None</button></span>`:''}</div>${sub?`<p class="sub" style="margin-top:-4px">${sub}</p>`:''}`;
   return `<div class="card">
    ${grp('Everyday','',every,'every')}<div class="tiles">${tiles(every)}</div></div>
-   ${grp('Video games','Explain the item, mob or thing without naming it.',GAMES,'games')}<div class="tiles">${tiles(GAMES)}</div></div>
-   ${grp('Your packs','Inside jokes, friends, your school, anything.',packs,'packs')}
+   ${grp('Video games','',GAMES,'games')}<div class="tiles">${tiles(GAMES)}</div></div>
+   ${grp('Your packs','',packs,'packs')}
     <div class="tiles">${tiles(packs)}${edit==null?`<button class="tile new" data-act="newPack"><span class="tn" style="padding:0">+ New pack</span></button>`:''}</div>
     ${packs.length&&edit==null?`<div class="chips" style="margin-top:10px">${packs.map(c=>`<button class="chip" data-editpack="${esc(c)}">Edit ${esc(c)}</button>`).join('')}</div>`:''}
     ${edit!=null?packForm():''}
@@ -295,12 +299,12 @@ The big tree, outside">${esc(old.map(([w,c])=>c?w+', '+c:w).join('\n'))}</textar
 function tabSettings(maxI){
   return `<div class="card">
    <div class="sec"><h3>Imposter's hint</h3><p class="sub">What the imposter sees instead of the word</p>
-    <div class="opts">${HINTS.map(([k,t,d,tag])=>`<button class="opt" data-hint="${k}" aria-pressed="${S.hint==k}"><i></i><div><b>${t}${tag?`<span class="tag">${tag}</span>`:''}</b><span>${d}</span></div></button>`).join('')}</div></div>
-   <div class="sec"><h3>Imposters</h3><p class="sub">${maxI<3?`More unlock with more players`:'How many sneaky ones'}</p>
+    <div class="opts">${HINTS.map(([k,t,d,tag])=>`<button class="opt" data-hint="${k}" aria-pressed="${S.hint==k}"><i></i><div><b>${t}${tag?`<span class="tag">${tag}</span>`:''}</b>${S.hint==k?`<span>${d}</span>`:''}</div></button>`).join('')}</div></div>
+   <div class="sec"><h3>Imposters</h3>${maxI<3?`<p class="sub">More unlock with more players</p>`:'<div style="height:10px"></div>'}
     <div class="seg">${[1,2,3].map(k=>`<button data-imps="${k}" aria-pressed="${S.imps==k}" ${k>maxI?'disabled':''}>${k}</button>`).join('')}</div></div>
-   <div class="sec"><h3>Talk timer</h3><p class="sub">Rings when time's up</p>
+   <div class="sec"><h3>Talk timer</h3><div style="height:10px"></div>
     <div class="seg">${[[0,'Off'],[120,'2 min'],[180,'3 min'],[300,'5 min']].map(([k,l])=>`<button data-timer="${k}" aria-pressed="${S.timer==k}">${l}</button>`).join('')}</div></div>
-   <div class="sec"><h3>Sounds</h3><p class="sub">Vibration works on Android only</p>
+   <div class="sec"><h3>Sounds</h3><div style="height:10px"></div>
     <div class="seg"><button data-sound="1" aria-pressed="${S.sound}">On</button><button data-sound="0" aria-pressed="${!S.sound}">Off</button></div></div>
   </div>`;
 }
