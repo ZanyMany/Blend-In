@@ -20,7 +20,7 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 - Custom word packs you make yourself
 - No repeat words until a category runs out
 - Sounds and vibration
-- Works offline once loaded; add it to your home screen to use it like an app
+- Add it to your home screen to use it like an app
 
 ## Run it
 
