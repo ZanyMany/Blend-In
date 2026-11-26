@@ -17,7 +17,7 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 - Hold-to-reveal role cards in each player's colour
 - Imposter hint options: none, category, clue, or both
 - 1–3 imposters, talk timer, scoreboard
-- Everyday categories plus video game categories (Minecraft, Fortnite, Pokémon, Roblox)
+- Everyday categories plus video game categories (Block World, Fortnite, Roblox)
 - Custom word packs you make yourself
 - No repeat words until a category runs out
 - Sounds and vibration
@@ -27,4 +27,4 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 
 It's a single `index.html` file. Open it in a browser, or turn on GitHub Pages for this repo (Settings → Pages → Deploy from branch → `main`).
 
-Not affiliated with Mojang, Microsoft, Epic Games, Nintendo, The Pokémon Company or Roblox. Game names are used only to describe word categories.
+Not affiliated with Mojang, Microsoft, Epic Games or Roblox. Game names are used only to describe word categories.
