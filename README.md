@@ -7,7 +7,7 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 ## How to play
 
 1. Add everyone's names in seating order. Roles go around in that order.
-2. Pick your categories, how many imposters, the imposter's hint and a talk timer.
+2. Confirm players, then pick your word categories, then choose settings (imposter hint, number of imposters, talk timer).
 3. Pass the phone. Each player presses and holds their name card to see their role, then lets go to hide it.
 4. Talk, then vote for who you think the imposter is.
 
@@ -15,7 +15,7 @@ Everyone gets the secret word, except the imposter. Take turns giving clues, the
 
 - Tabs for Players, Words and Settings with a sticky Play button
 - Hold-to-reveal role cards in each player's colour
-- Imposter hint options: none, category, clue word, or both
+- Imposter hint options: none, category, clue, or both
 - 1–3 imposters, talk timer, scoreboard
 - Everyday categories plus video game categories (Minecraft, Fortnite, Pokémon, Roblox)
 - Custom word packs you make yourself

@@ -165,7 +165,7 @@ const CATS={
 };
 const GAMES=['Minecraft','Fortnite','Pokémon','Roblox'];
 const TINT={"Food":"#ff7a3d","Animals":"#22b573","Places":"#14a9c4","Jobs":"#7c5cff","Sports & games":"#ff4f97","Around the house":"#e89b00","Tech":"#3a7bff","Minecraft":"#4c9a3a","Fortnite":"#8b5cf6","Pokémon":"#e8443a","Roblox":"#55627f"};
-const HINTS=[["none","No hint","The imposter knows nothing and bluffs from everyone's clues.","Hardest"],["cat","Category","The imposter learns the category, like Animals.",""],["clue","Clue word","One vague word that fits a few answers, like “gray” for Elephant.",""],["both","Category + clue","Both of the above.","Easiest"]];
+const HINTS=[["none","No hint","The imposter knows nothing and bluffs from everyone's clues.","Hardest"],["cat","Category","The imposter learns the category, like Animals.",""],["clue","Clue","One vague word that fits a few answers, like “gray” for Elephant.",""],["both","Category + clue","Both of the above.","Easiest"]];
 const COLS=['#ff6b5b','#f5a000','#22b573','#14a9c4','#7c5cff','#ff4f97','#3a7bff','#6fa52b','#ff7a3d','#0ea5a0'];
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -218,7 +218,9 @@ function setup(){
   <div class="tabs" role="tablist">${[['players','Players',n],['words','Words',nc],['settings','Settings','']].map(([k,l,c])=>`<button role="tab" data-tab="${k}" aria-selected="${S.tab==k}">${l}${c!==''?`<span class="n">${c}</span>`:''}</button>`).join('')}</div>
   ${body}
   <div class="bar"><p class="sum">${n} player${n==1?'':'s'} · ${words} words · ${S.imps} imposter${S.imps>1?'s':''} · ${HINTS.find(h=>h[0]==S.hint)[1].toLowerCase()} hint</p>
-  <button class="btn" data-act="start" ${n<3||!nc?'disabled':''}>${n<3?`Add ${3-n} more player${3-n>1?'s':''}`:!nc?'Pick at least one category':"Let's play!"}</button></div>`;
+  ${S.tab=='players'?`<button class="btn" data-tab="words" data-flow="1" ${n<3?'disabled':''}>${n<3?`Add ${3-n} more player${3-n>1?'s':''}`:'Confirm players →'}</button>`
+   :S.tab=='words'?`<button class="btn" data-tab="settings" data-flow="1" ${!nc?'disabled':''}>${!nc?'Pick at least one category':'Confirm words →'}</button>`
+   :`<button class="btn" data-act="start" ${n<3||!nc?'disabled':''}>${n<3?'Add players first':!nc?'Pick a category first':"Let's play!"}</button>`}</div>`;
 }
 function tabPlayers(){
   const n=S.players.length,scored=S.players.some(p=>S.scores[p]);
@@ -255,7 +257,7 @@ function packForm(){
 Pizza Friday, lunch
 Mr. Lee, glasses
 The big tree, outside">${esc(old.map(([w,c])=>c?w+', '+c:w).join('\n'))}</textarea>
-   <p class="sub" style="margin:0">At least 4 words. Words without a clue just give the imposter no clue word.</p>
+   <p class="sub" style="margin:0">At least 4 words. Words without a clue just give the imposter no clue.</p>
    ${perr?`<p class="err" style="margin:0">${esc(perr)}</p>`:''}
    <div class="row"><button class="add" type="submit" style="flex:1">Save pack</button><button type="button" class="chip" data-act="cancelPack">Cancel</button>${edit?`<button type="button" class="chip" style="color:var(--coral)" data-act="delPack">Delete</button>`:''}</div>
   </form>`;
@@ -351,7 +353,7 @@ function result(){
    <div class="big">${G.imps.map(esc).join(' & ')}</div>
    <span class="pill" style="background:var(--sun);color:#3a2a00">The word was ${esc(G.word)}</span>
    <div class="split"><p class="small">What the imposter saw</p><div class="chips" style="justify-content:center;margin-top:8px">${hint}</div>
-   ${(S.hint=='none'||S.hint=='cat')&&G.clue?`<p class="small" style="margin-top:8px">The clue word would have been “${esc(G.clue)}”</p>`:''}</div></div>
+   ${(S.hint=='none'||S.hint=='cat')&&G.clue?`<p class="small" style="margin-top:8px">The clue would have been “${esc(G.clue)}”</p>`:''}</div></div>
   ${r!='skip'?`<div class="card"><h3>Scoreboard</h3><p class="sub">${impWin?'+2 for each imposter':'+1 for everyone in the crew'}</p>
    <table class="score">${[...S.players].sort((a,b)=>(S.scores[b]||0)-(S.scores[a]||0)).map(p=>`<tr><td><span class="who">${av(p)}${esc(p)}</span></td><td>${lastPts[p]?`<span class="plus">+${lastPts[p]}</span>`:''}${S.scores[p]||0}</td></tr>`).join('')}</table></div>`:''}
   <div style="margin-top:18px"><button class="btn" data-act="start">Play again</button>
@@ -395,7 +397,7 @@ app.addEventListener('submit',e=>{
 app.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
   if(d.act!='quit'&&quitArm){quitArm=false;const q=document.querySelector('.quit');if(q){q.classList.remove('sure');q.textContent='✕ Quit'}}
-  if(d.tab){S.tab=d.tab;edit=null;err='';save();render();return}
+  if(d.tab){S.tab=d.tab;edit=null;err='';save();render();if(d.flow)document.querySelector('.tabs').scrollIntoView({behavior:'smooth',block:'start'});return}
   if(d.up!=null||d.down!=null){const i=+(d.up??d.down),j=d.up!=null?i-1:i+1;[S.players[i],S.players[j]]=[S.players[j],S.players[i]];save();render();return}
   if(d.rm!=null){S.players.splice(+d.rm,1);err='';save();render();return}
   if(d.hint){S.hint=d.hint;save();render();return}
@@ -416,8 +418,8 @@ app.addEventListener('click',e=>{
   else if(a=='toEnd'){G.res='skip';lastPts={};SFX.win();go('result')}
   else if(a=='addTime'){const was=G.left;G.left+=30;G.total=Math.max(G.total,G.left);if(!was){render()}else ringDraw()}
   else if(a=='resetTime'){G.left=S.timer;G.total=S.timer;render()}
-  else if(a=='home'){G.view='setup';render();scrollTo(0,0)}
-  else if(a=='quit'){if(quitArm){quitArm=false;G.view='setup';render();scrollTo(0,0)}else{quitArm=true;b.classList.add('sure');b.textContent='Tap again to quit'}}
+  else if(a=='home'){G.view='setup';S.tab='players';render();scrollTo(0,0)}
+  else if(a=='quit'){if(quitArm){quitArm=false;G.view='setup';S.tab='players';render();scrollTo(0,0)}else{quitArm=true;b.classList.add('sure');b.textContent='Tap again to quit'}}
   else if(a=='newPack'){edit='';perr='';render();document.getElementById('pname')?.focus()}
   else if(a=='cancelPack'){edit=null;perr='';render()}
   else if(a=='delPack'){delete S.custom[edit];S.cats=S.cats.filter(c=>c!==edit);edit=null;save();render()}
